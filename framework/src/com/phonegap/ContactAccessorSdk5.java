@@ -207,7 +207,7 @@ public class ContactAccessorSdk5 extends ContactAccessor {
 				ContactsContract.Data.CONTACT_ID + " ASC");				
 		
 		
-		//Log.d(LOG_TAG, "Cursor length = " + c.getCount());
+		Log.d(LOG_TAG, "Cursor length = " + c.getCount());
 		
 		String contactId = "";
 		String rawId = "";
@@ -314,7 +314,8 @@ public class ContactAccessorSdk5 extends ContactAccessor {
 					}
 					else if (mimetype.equals(ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE) 
 							&& isRequired("photos",populate)) {
-						photos.put(photoQuery(c, contactId));
+						JSONObject vPhoto = photoQuery(c, contactId);
+						if (vPhoto != null) photos.put(photoQuery(c, contactId));
 					}
 				}
 				catch (JSONException e) {
@@ -668,20 +669,41 @@ public class ContactAccessorSdk5 extends ContactAccessor {
 		return website;
 	}	
 
+    private boolean hasContactPhoto(android.content.ContentResolver cr, Uri photoUri) {
+            Cursor cursor = cr.query(photoUri, new String[]{ContactsContract.CommonDataKinds.Photo.PHOTO}, null, null, null);
+            try {
+                if (cursor == null || !cursor.moveToNext()) {
+                    return false;
+                }
+                byte[] data = cursor.getBlob(0);
+                if (data == null) {
+                    return false;
+                }
+                return true;
+            } finally {
+                if (cursor != null) cursor.close();
+            }
+    }
+
 	/**
 	 * Create a ContactField JSONObject
 	 * @param contactId 
 	 * @return a JSONObject representing a ContactField
 	 */
 	private JSONObject photoQuery(Cursor cursor, String contactId) {
-		JSONObject photo = new JSONObject();
+		JSONObject photo = null;
 		try {
-			photo.put("id", cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo._ID)));
-			photo.put("pref", false);
-			photo.put("type", "url");
 		    Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, (new Long(contactId)));
 		    Uri photoUri = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-			photo.put("value", photoUri.toString());
+            //Cursor cur = mApp.getContentResolver().query(ContactsContract.Data.CONTENT_URI, null , ContactsContract.Data.CONTACT_ID + "=" + contactId + " AND " + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'", null, null);
+            //InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(mApp.getContentResolver(), person);
+			if (hasContactPhoto( mApp.getContentResolver(), photoUri)) {
+				photo = new JSONObject();
+				photo.put("id", cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo._ID)));
+				photo.put("pref", false);
+				photo.put("type", "url");
+				photo.put("value", photoUri.toString());
+			}
 		} catch (JSONException e) {
 			Log.e(LOG_TAG, e.getMessage(), e);
 		}

@@ -97,6 +97,9 @@ public class CallbackServer implements Runnable {
 	 */
 	public void init(String url) {
 		//System.out.println("CallbackServer.start("+url+")");
+			this.usePolling = true;
+			this.stopServer();
+/*
 
 		// Determine if XHR or polling is to be used
 		if ((url != null) && !url.startsWith("file://")) {
@@ -111,6 +114,7 @@ public class CallbackServer implements Runnable {
 			this.usePolling = false;
 			this.startServer();
 		}
+//*/
 	}
 	
 	/**
@@ -222,6 +226,7 @@ public class CallbackServer implements Runnable {
 								 else {
 									 //System.out.println("CallbackServer -- sending item");
 									 response = "HTTP/1.1 200 OK\r\n\r\n"+this.getJavascript();
+									 //response = "HTTP/1.1 200 OK\r\ncontent-type: application/x-javascript; charset=UTF-8\r\n\r\n"+this.getJavascript();
 								 }
 							 }
 							 else {

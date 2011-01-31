@@ -495,6 +495,7 @@ PhoneGap.exec = function(success, fail, service, action, args) {
         var r = ""+PluginManager.exec(service, action, callbackId, this.stringify(args), true);
         
         // If a result was returned
+        console.log(service+'('+callbackId+')  '+r);
         if (r.length > 0) {
             eval("var v="+r+";");
         
@@ -672,6 +673,7 @@ PhoneGap.JSCallback = function() {
             // If callback has JavaScript statement to execute
             if (xmlhttp.status == 200) {
 
+console.log("xmlcallback:"+ xmlhttp.getAllResponseHeaders()); //todo this responseText is not UTF-8!!!
                 var msg = xmlhttp.responseText;
                 setTimeout(function() {
                     try {
