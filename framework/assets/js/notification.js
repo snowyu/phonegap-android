@@ -6,11 +6,14 @@
  * Copyright (c) 2010, IBM Corporation
  */
 
+if (!PhoneGap.hasResource("notification")) {
+PhoneGap.addResource("notification");
+
 /**
  * This class provides access to notifications on the device.
  */
-function Notification() {
-}
+Notification = function() {
+};
 
 /**
  * Open a native alert dialog, with a customizable title and button text.
@@ -111,6 +114,8 @@ Notification.prototype.beep = function(count) {
 };
 
 PhoneGap.addConstructor(function() {
-    if (typeof navigator.notification == "undefined") navigator.notification = new Notification();
+    if (typeof navigator.notification === "undefined") {
+        navigator.notification = new Notification();
+    }
 });
-
+};

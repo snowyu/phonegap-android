@@ -6,11 +6,14 @@
  * Copyright (c) 2010, IBM Corporation
  */
 
+if (!PhoneGap.hasResource("compass")) {
+PhoneGap.addResource("compass");
+
 /**
  * This class provides access to device Compass data.
  * @constructor
  */
-function Compass() {
+Compass = function() {
     /**
      * The last known Compass position.
      */
@@ -34,13 +37,13 @@ Compass.ERROR_MSG = ["Not running", "Starting", "", "Failed to start"];
 Compass.prototype.getCurrentHeading = function(successCallback, errorCallback, options) {
 
     // successCallback required
-    if (typeof successCallback != "function") {
+    if (typeof successCallback !== "function") {
         console.log("Compass Error: successCallback is not a function");
         return;
     }
 
     // errorCallback optional
-    if (errorCallback && (typeof errorCallback != "function")) {
+    if (errorCallback && (typeof errorCallback !== "function")) {
         console.log("Compass Error: errorCallback is not a function");
         return;
     }
@@ -60,16 +63,16 @@ Compass.prototype.getCurrentHeading = function(successCallback, errorCallback, o
 Compass.prototype.watchHeading= function(successCallback, errorCallback, options) {
 
     // Default interval (100 msec)
-    var frequency = (options != undefined) ? options.frequency : 100;
+    var frequency = (options !== undefined) ? options.frequency : 100;
 
     // successCallback required
-    if (typeof successCallback != "function") {
+    if (typeof successCallback !== "function") {
         console.log("Compass Error: successCallback is not a function");
         return;
     }
 
     // errorCallback optional
-    if (errorCallback && (typeof errorCallback != "function")) {
+    if (errorCallback && (typeof errorCallback !== "function")) {
         console.log("Compass Error: errorCallback is not a function");
         return;
     }
@@ -109,5 +112,8 @@ Compass.prototype.clearWatch = function(id) {
 };
 
 PhoneGap.addConstructor(function() {
-    if (typeof navigator.compass == "undefined") navigator.compass = new Compass();
+    if (typeof navigator.compass === "undefined") {
+        navigator.compass = new Compass();
+    }
 });
+};

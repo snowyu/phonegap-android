@@ -6,6 +6,9 @@
  * Copyright (c) 2010, IBM Corporation
  */
 
+if (!PhoneGap.hasResource("camera")) {
+PhoneGap.addResource("camera");
+
 /**
  * This class provides access to the device camera.
  *
@@ -59,13 +62,13 @@ Camera.prototype.PictureSourceType = Camera.PictureSourceType;
 Camera.prototype.getPicture = function(successCallback, errorCallback, options) {
 
     // successCallback required
-    if (typeof successCallback != "function") {
+    if (typeof successCallback !== "function") {
         console.log("Camera Error: successCallback is not a function");
         return;
     }
 
     // errorCallback optional
-    if (errorCallback && (typeof errorCallback != "function")) {
+    if (errorCallback && (typeof errorCallback !== "function")) {
         console.log("Camera Error: errorCallback is not a function");
         return;
     }
@@ -80,12 +83,15 @@ Camera.prototype.getPicture = function(successCallback, errorCallback, options) 
         destinationType = this.options.destinationType;
     }
     var sourceType = Camera.PictureSourceType.CAMERA;
-    if (typeof this.options.sourceType == "number") {
+    if (typeof this.options.sourceType === "number") {
         sourceType = this.options.sourceType;
     }
     PhoneGap.exec(successCallback, errorCallback, "Camera", "takePicture", [quality, destinationType, sourceType]);
 };
 
 PhoneGap.addConstructor(function() {
-    if (typeof navigator.camera == "undefined") navigator.camera = new Camera();
+    if (typeof navigator.camera === "undefined") {
+        navigator.camera = new Camera();
+    }
 });
+};

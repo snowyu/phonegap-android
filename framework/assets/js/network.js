@@ -6,11 +6,14 @@
  * Copyright (c) 2010, IBM Corporation
  */
 
+if (!PhoneGap.hasResource("network")) {
+PhoneGap.addResource("network");
+
 /**
  * This class contains information about any NetworkStatus.
  * @constructor
  */
-function NetworkStatus() {
+NetworkStatus = function() {
     //this.code = null;
     //this.message = "";
 };
@@ -23,7 +26,7 @@ NetworkStatus.REACHABLE_VIA_WIFI_NETWORK = 2;
  * This class provides access to device Network data (reachability).
  * @constructor
  */
-function Network() {
+Network = function() {
     /**
      * The last known Network status.
      * { hostName: string, ipAddress: string,
@@ -57,6 +60,8 @@ Network.prototype.isReachable = function(uri, callback, options) {
 };
 
 PhoneGap.addConstructor(function() {
-    if (typeof navigator.network == "undefined") navigator.network = new Network();
+    if (typeof navigator.network === "undefined") {
+        navigator.network = new Network();
+    }
 });
-
+};

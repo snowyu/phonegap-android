@@ -6,6 +6,9 @@
  * Copyright (c) 2010, IBM Corporation
  */
 
+if (!PhoneGap.hasResource("media")) {
+PhoneGap.addResource("media");
+
 /**
  * List of media objects.
  * PRIVATE
@@ -40,8 +43,8 @@ PhoneGap.Media.onStatus = function(id, msg, value) {
     var media = PhoneGap.mediaObjects[id];
 
     // If state update
-    if (msg == Media.MEDIA_STATE) {
-        if (value == Media.MEDIA_STOPPED) {
+    if (msg === Media.MEDIA_STATE) {
+        if (value === Media.MEDIA_STOPPED) {
             if (media.successCallback) {
                 media.successCallback();
             }
@@ -50,10 +53,10 @@ PhoneGap.Media.onStatus = function(id, msg, value) {
             media.statusCallback(value);
         }
     }
-    else if (msg == Media.MEDIA_DURATION) {
+    else if (msg === Media.MEDIA_DURATION) {
         media._duration = value;
     }
-    else if (msg == Media.MEDIA_ERROR) {
+    else if (msg === Media.MEDIA_ERROR) {
         if (media.errorCallback) {
             media.errorCallback(value);
         }
@@ -76,25 +79,25 @@ PhoneGap.Media.onStatus = function(id, msg, value) {
 Media = function(src, successCallback, errorCallback, statusCallback, positionCallback) {
 
     // successCallback optional
-    if (successCallback && (typeof successCallback != "function")) {
+    if (successCallback && (typeof successCallback !== "function")) {
         console.log("Media Error: successCallback is not a function");
         return;
     }
 
     // errorCallback optional
-    if (errorCallback && (typeof errorCallback != "function")) {
+    if (errorCallback && (typeof errorCallback !== "function")) {
         console.log("Media Error: errorCallback is not a function");
         return;
     }
 
     // statusCallback optional
-    if (statusCallback && (typeof statusCallback != "function")) {
+    if (statusCallback && (typeof statusCallback !== "function")) {
         console.log("Media Error: statusCallback is not a function");
         return;
     }
 
     // statusCallback optional
-    if (positionCallback && (typeof positionCallback != "function")) {
+    if (positionCallback && (typeof positionCallback !== "function")) {
         console.log("Media Error: positionCallback is not a function");
         return;
     }
@@ -128,8 +131,8 @@ Media.MEDIA_MSG = ["None", "Starting", "Running", "Paused", "Stopped"];
  * This class contains information about any Media errors.
  * @constructor
  */
-function MediaError() {
-    this.code = null,
+MediaError = function() {
+    this.code = null;
     this.message = "";
 };
 
@@ -198,4 +201,4 @@ Media.prototype.stopRecord = function() {
 Media.prototype.release = function() {
     PhoneGap.exec(null, null, "Media", "release", [this.id]);
 };
-
+};

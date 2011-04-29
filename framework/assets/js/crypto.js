@@ -8,6 +8,9 @@
 
 // TODO: Needs to be commented
 
+if (!PhoneGap.hasResource("crypto")) {
+PhoneGap.addResource("crypto");
+
 var Crypto = function() {
 };
 
@@ -30,6 +33,8 @@ Crypto.prototype.getPlainString = function(string) {
 };
 
 PhoneGap.addConstructor(function() {
-    if (typeof navigator.Crypto == "undefined") navigator.Crypto = new Crypto();
+    if (typeof navigator.Crypto === "undefined") {
+        navigator.Crypto = new Crypto();
+    }
 });
-
+};

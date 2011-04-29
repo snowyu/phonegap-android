@@ -6,18 +6,21 @@
  * Copyright (c) 2010, IBM Corporation
  */
 
-function Acceleration(x, y, z) {
+if (!PhoneGap.hasResource("accelerometer")) {
+PhoneGap.addResource("accelerometer");
+
+Acceleration = function(x, y, z) {
   this.x = x;
   this.y = y;
   this.z = z;
   this.timestamp = new Date().getTime();
-};
+}
 
 /**
  * This class provides access to device accelerometer data.
  * @constructor
  */
-function Accelerometer() {
+Accelerometer = function() {
 
     /**
      * The last known acceleration.  type=Acceleration()
@@ -28,7 +31,7 @@ function Accelerometer() {
      * List of accelerometer watch timers
      */
     this.timers = {};
-};
+}
 
 Accelerometer.ERROR_MSG = ["Not running", "Starting", "", "Failed to start"];
 
@@ -42,13 +45,13 @@ Accelerometer.ERROR_MSG = ["Not running", "Starting", "", "Failed to start"];
 Accelerometer.prototype.getCurrentAcceleration = function(successCallback, errorCallback, options) {
 
     // successCallback required
-    if (typeof successCallback != "function") {
+    if (typeof successCallback !== "function") {
         console.log("Accelerometer Error: successCallback is not a function");
         return;
     }
 
     // errorCallback optional
-    if (errorCallback && (typeof errorCallback != "function")) {
+    if (errorCallback && (typeof errorCallback !== "function")) {
         console.log("Accelerometer Error: errorCallback is not a function");
         return;
     }
@@ -68,16 +71,16 @@ Accelerometer.prototype.getCurrentAcceleration = function(successCallback, error
 Accelerometer.prototype.watchAcceleration = function(successCallback, errorCallback, options) {
 
     // Default interval (10 sec)
-    var frequency = (options != undefined)? options.frequency : 10000;
+    var frequency = (options !== undefined)? options.frequency : 10000;
 
     // successCallback required
-    if (typeof successCallback != "function") {
+    if (typeof successCallback !== "function") {
         console.log("Accelerometer Error: successCallback is not a function");
         return;
     }
 
     // errorCallback optional
-    if (errorCallback && (typeof errorCallback != "function")) {
+    if (errorCallback && (typeof errorCallback !== "function")) {
         console.log("Accelerometer Error: errorCallback is not a function");
         return;
     }
@@ -108,12 +111,15 @@ Accelerometer.prototype.watchAcceleration = function(successCallback, errorCallb
 Accelerometer.prototype.clearWatch = function(id) {
 
     // Stop javascript timer & remove from timer list
-    if (id && navigator.accelerometer.timers[id] != undefined) {
+    if (id && navigator.accelerometer.timers[id] !== undefined) {
         clearInterval(navigator.accelerometer.timers[id]);
         delete navigator.accelerometer.timers[id];
     }
 };
 
 PhoneGap.addConstructor(function() {
-    if (typeof navigator.accelerometer == "undefined") navigator.accelerometer = new Accelerometer();
+    if (typeof navigator.accelerometer === "undefined") {
+        navigator.accelerometer = new Accelerometer();
+    }
 });
+};
